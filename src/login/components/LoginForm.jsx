@@ -8,6 +8,7 @@ function LoginForm() {
     const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -101,15 +102,18 @@ function LoginForm() {
                                 id="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 placeholder="Ingrese su contraseña"
                                 className="flex-1 h-14 p-[15px] bg-transparent outline-none"
                             />
                             <button
                                 type="button"
+                                onClick={() => setShowPassword(!showPassword)}
                                 className="px-4 text-text-sub-light hover:text-primary"
                             >
-                                <span className="material-symbols-outlined">visibility</span>
+                                <span className="material-symbols-outlined">
+                                    {showPassword ? "visibility_off" : "visibility"}
+                                </span>
                             </button>
                         </div>
                     </div>
