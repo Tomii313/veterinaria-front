@@ -9,14 +9,16 @@ function Inicio() {
     const [citasProximas, setCitasProximas] = useState([])
     const [turnosFecha, setTurnosFecha] = useState([])
     const [internados, setInternados] = useState([])
+    const [countInternados, setCountInternados] = useState([])
     const [permisos, setPermisos] = useState([])
+
     const canViewInventario = permisos.includes("inventario.view_producto")
     /* const canViewPersonal = permisos.includes("personal.view_personal") */
     const canViewPersonal = permisos.includes("veterinarios.view_veterinario")
     const canViewDueños = permisos.includes("duenios.view_duenio")
     const canViewPacientes = permisos.includes("animales.view_animal")
     const canViewAgenda = permisos.includes("turnos.view_turno")
-    const canViewInternaciones = permisos.includes("internaciones.view_internacion")
+    const canViewInternaciones = permisos.includes("internacion.view_internacion")
     const navigate = useNavigate()
     const acciones = [
         { to: "/dueños/agregar", icon: "person_add", label: "Registrar Cliente", color: "text-blue-600", bg: "bg-blue-50" },
@@ -26,6 +28,20 @@ function Inicio() {
     ]
     const accessToken = localStorage.getItem("access")
 
+
+    useEffect(() => {
+        fetch(`${import.meta.env.VITE_API_URL}/internaciones/internaciones_activas/`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`,
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                setCountInternados(data)
+            })
+    })
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/permisos/`, {
 
@@ -109,7 +125,7 @@ function Inicio() {
         })
             .then(res => res.json())
             .then(data => setInternados(data))
-    })
+    }, [])
     return (
         <div className="flex h-screen w-full overflow-hidden bg-[#f6f8f6] font-['Manrope',_sans-serif] text-[#111813]">
             {/* Sidebar / Menú Lateral */}
@@ -163,8 +179,8 @@ function Inicio() {
                             {canViewInternaciones && (
                                 <a className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#61896f] hover:bg-gray-100 hover:text-[#111813] font-medium transition-colors" href="#">
                                     <span className="material-symbols-outlined">medical_services</span>
-                                    <span>Hospitalización</span>
-                                    <span className="ml-auto bg-red-100 text-red-600 text-xs font-bold px-2 py-0.5 rounded-full">2</span>
+                                    <span>Internaciones</span>
+                                    <span className="ml-auto bg-red-100 text-red-600 text-xs font-bold px-2 py-0.5 rounded-full">{countInternados}</span>
                                 </a>
                             )}
                         </Link>

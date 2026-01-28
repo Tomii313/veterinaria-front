@@ -15,42 +15,44 @@ function AgregarDuenio() {
     const [dni, setDni] = useState("")
     const Navigate = useNavigate()
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
-
-
-        const response = fetch(`${import.meta.env.VITE_API_URL}/duenios/`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${accessToken}`,
-
-            },
-            body: JSON.stringify({
-                nombre,
-                apellido,
-                telefono,
-                email,
-                dni
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/duenios/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify({
+                    nombre,
+                    apellido,
+                    telefono,
+                    email,
+                    dni
+                })
             })
 
+            if (!response.ok) {
+                const data = await response.json()
+                throw new Error(data.dni[0])
+            }
 
+            Swal.fire("OK", "Dueño creado", "success")
+            Navigate("/dueños")
 
+        } catch (err) {
+            Swal.fire("Error", err.message, "error")
         }
-
-        )
-        Swal.fire({
-            title: "Buen trabajo!",
-            text: "El dueño ha sido creado con éxito!",
-            icon: "success"
-        });
-        Navigate("/dueños")
-
-
-
-
     }
+
+
+
+
+
+
+
     return (
         <div className="bg-white text-[#111813] font-['Manrope',_sans-serif] min-h-screen flex flex-col">
             {/* Navegación Superior */}

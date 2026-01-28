@@ -13,6 +13,9 @@ function AgregarPaciente() {
     const [peso, setPeso] = useState("")
     const [duenio, setDuenio] = useState(null)
     const [dni, setDni] = useState("")
+    const [textoBusqueda, setTextoBusqueda] = useState("")
+    const [resultados, setResultados] = useState([])
+    const [mostrarResultados, setMostrarResultados] = useState(false)
 
     const Navigate = useNavigate()
 
@@ -35,7 +38,7 @@ function AgregarPaciente() {
                     genero,
                     edad,
                     peso,
-                    duenio: duenio.id,
+                    duenio: duenio ? duenio.id : null,
 
 
                 })
@@ -48,37 +51,26 @@ function AgregarPaciente() {
         }
     }
 
-    function filtrar_dni() {
 
-        try {
-            fetch(`${import.meta.env.VITE_API_URL}/animales/filtrar_dni/?dni=${dni}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${accessToken}`,
-
-                },
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (!Array.isArray(data) || data.length === 0) {
-                        setDuenio(null)
-                        alert("Propietario no encontrado")
-                        return
-                    }
-                    setDuenio(data[0])
-                })
-
-
-                .catch(error => {
-                    console.log(error)
-                })
-        } catch (error) {
-            console.log(error)
+    const buscarDuenios = async (texto) => {
+        if (texto.length < 2) {
+            setResultados([])
+            return
         }
+
+        const res = await fetch(
+            `${import.meta.env.VITE_API_URL}/duenios/?search=${texto}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`,
+                },
+            }
+        )
+
+        const data = await res.json()
+        setResultados(data.results ?? data)
+        setMostrarResultados(true)
     }
-
-
 
 
     return (
@@ -202,24 +194,55 @@ function AgregarPaciente() {
                                     <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 group-focus-within:text-[#13ec5b]">
                                         <span className="material-symbols-outlined text-[22px]">search</span>
                                     </span>
-                                    <input value={dni} onChange={(e) => setDni(e.target.value)} className="w-full rounded-2xl border-slate-200 bg-white text-slate-900 focus:border-[#13ec5b] focus:ring-[#13ec5b]/20 h-14 pl-12 pr-4 placeholder:text-slate-300 text-sm transition-all" placeholder="Buscar por nombre, DNI o teléfono..." type="text" />
-                                    <button type="button" onClick={filtrar_dni} className="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 group-focus-within:text-[#13ec5b]">
-                                        <span className="material-symbols-outlined text-[22px]">search</span>
-                                    </button>
-                                    {duenio && (
-                                        <div className="absolute top-0 left-0 w-full h-full bg-white rounded-2xl p-4">
-                                            <p>Propietario encontrado:  {duenio.duenio_nombre} {duenio.duenio_apellido} </p>
+                                    <input
+                                        value={textoBusqueda}
+                                        onChange={(e) => {
+                                            setTextoBusqueda(e.target.value)
+                                            buscarDuenios(e.target.value)
+                                        }}
+                                        className="w-full rounded-2xl border-slate-200 bg-white h-14 pl-12 pr-4"
+                                        placeholder="Buscar por DNI, nombre o apellido..."
+                                    />
+                                    {mostrarResultados && (
+                                        <div className="absolute z-50 mt-2 w-full bg-white border rounded-xl shadow-lg">
+                                            {resultados.length === 0 && (
+                                                <p className="p-4 text-sm text-slate-500">
+                                                    No se encontró ningún propietario
+                                                </p>
+                                            )}
+
+                                            {resultados.map((d) => (
+                                                <div
+                                                    key={d.id}
+                                                    onClick={() => {
+                                                        setDuenio(d)
+                                                        setTextoBusqueda(`${d.nombre} ${d.apellido} - ${d.dni}`)
+                                                        setMostrarResultados(false)
+                                                    }}
+                                                    className="p-4 hover:bg-slate-100 cursor-pointer"
+                                                >
+                                                    <p className="font-bold">
+                                                        {d.nombre} {d.apellido}
+                                                    </p>
+                                                    <p className="text-sm text-slate-500">
+                                                        DNI: {d.dni}
+                                                    </p>
+                                                </div>
+                                            ))}
                                         </div>
                                     )}
+
                                 </div>
                             </div>
                         </div>
 
                         {/* Footer / Actions */}
                         <div className="mt-4 pb-12 flex items-center justify-end gap-4">
-                            <button className="px-8 py-3 rounded-2xl border border-slate-200 text-slate-600 text-sm font-bold hover:bg-slate-50 transition-all" type="button">
-                                Cancelar
-                            </button>
+                            <Link to="/pacientes">
+                                <button className="px-8 py-3 rounded-2xl border border-slate-200 text-slate-600 text-sm font-bold hover:bg-slate-50 transition-all" type="button">
+                                    Cancelar
+                                </button>
+                            </Link>
                             <button className="px-10 py-3 rounded-2xl bg-[#13ec5b] text-white text-sm font-black hover:bg-[#0fb847] shadow-xl shadow-[#13ec5b]/20 transition-all transform active:scale-95" type="submit">
                                 Guardar Mascota
                             </button>

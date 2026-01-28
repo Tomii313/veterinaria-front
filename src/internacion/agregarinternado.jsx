@@ -20,7 +20,7 @@ function AgregarInternado() {
     const buscarAnimales = async (texto) => {
         if (texto.length < 2) return;
 
-        const res = await fetch(`http://localhost:8000/animales/?search=${texto}`, {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/animales/?search=${texto}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -36,7 +36,7 @@ function AgregarInternado() {
     }
 
     useEffect(() => {
-        fetch("http://localhost:8000/jaulas/", {
+        fetch(`${import.meta.env.VITE_API_URL}/jaulas/`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -49,7 +49,7 @@ function AgregarInternado() {
     }, [])
 
     useEffect(() => {
-        fetch("http://localhost:8000/veterinarios/", {
+        fetch(`${import.meta.env.VITE_API_URL}/veterinarios/`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -64,7 +64,7 @@ function AgregarInternado() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        fetch("http://localhost:8000/internaciones/", {
+        fetch(`${import.meta.env.VITE_API_URL}/internaciones/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
