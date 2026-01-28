@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import LoginHeader from "./LoginHeader"
 import "../../index.css"
+import Swal from "sweetalert2"
 
 function LoginForm() {
     const navigate = useNavigate();
@@ -37,13 +38,17 @@ function LoginForm() {
                 navigate("/inicio");
 
 
-                // Guardá también el is_superuser si lo vas a usar
+
                 localStorage.setItem("is_superuser", data.is_superuser ? "true" : "false");
 
                 navigate("/inicio");
 
             } else {
-                alert("Credenciales incorrectas")
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Credenciales incorrectas',
+                })
             }
         } catch (error) {
             console.log(error)
