@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
-
+import Swal from "sweetalert2"
 
 
 function añadirVeterinario() {
@@ -35,10 +35,10 @@ function añadirVeterinario() {
     const accessToken = localStorage.getItem("access")
 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
 
-        fetch(`${import.meta.env.VITE_API_URL}/veterinarios/`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/veterinarios/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -53,15 +53,33 @@ function añadirVeterinario() {
                 fecha_nacimiento: fechaNacimiento
             })
         })
-            .then(res => res.json())
-            .then(data => {
-                console.log("Veterinario guardado:", data)
-                crearHorarios(data.id)   // 🔥 ACÁ SE CREAN LOS HORARIOS
-                navigate("/personal")
+        const data = await response.json()
+
+        if (!response.ok) {
+
+            throw new Error(Object.values(data)[0][0])
+        }
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Veterinario guardado',
+            showConfirmButton: false,
+            timer: 1500
+        })
+        crearHorarios(data.id)   // 🔥 ACÁ SE CREAN LOS HORARIOS
+        navigate("/personal")
+
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
             })
-            .catch(err => {
-                console.error("Error:", err)
-            })
+
+
     }
     const crearHorarios = (veterinarioId) => {
         Object.entries(horarios).forEach(([dia, data]) => {
@@ -190,15 +208,15 @@ function añadirVeterinario() {
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                         <div className="flex flex-col gap-2 text-left">
                                             <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1">Nombre<span className="text-red-500">*</span></label>
-                                            <input onChange={(e) => setNombre(e.target.value)} className="w-full rounded-2xl border-slate-100 bg-[#f8fafc] h-12 px-5 font-bold focus:ring-2 focus:ring-[#13ec5b]/20 outline-none transition-all" placeholder="Juan" />
+                                            <input onChange={(e) => setNombre(e.target.value)} className="w-full rounded-2xl border-slate-100 bg-[#f8fafc] h-12 px-5 font-bold focus:ring-2 focus:ring-[#13ec5b]/20 outline-none transition-all" placeholder="Juan" maxLength="50" />
                                         </div>
                                         <div className="flex flex-col gap-2 text-left">
                                             <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1">Apellido<span className="text-red-500">*</span></label>
-                                            <input onChange={(e) => setApellido(e.target.value)} className="w-full rounded-2xl border-slate-100 bg-[#f8fafc] h-12 px-5 font-bold focus:ring-2 focus:ring-[#13ec5b]/20 outline-none transition-all" placeholder="Perez" />
+                                            <input onChange={(e) => setApellido(e.target.value)} className="w-full rounded-2xl border-slate-100 bg-[#f8fafc] h-12 px-5 font-bold focus:ring-2 focus:ring-[#13ec5b]/20 outline-none transition-all" placeholder="Perez" maxLength="50" />
                                         </div>
                                         <div className="flex flex-col gap-2 text-left">
                                             <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1">DNI<span className="text-red-500">*</span></label>
-                                            <input onChange={(e) => setDni(e.target.value)} className="w-full rounded-2xl border-slate-100 bg-[#f8fafc] h-12 px-5 font-bold focus:ring-2 focus:ring-[#13ec5b]/20 outline-none transition-all" placeholder="DNI" />
+                                            <input onChange={(e) => setDni(e.target.value)} className="w-full rounded-2xl border-slate-100 bg-[#f8fafc] h-12 px-5 font-bold focus:ring-2 focus:ring-[#13ec5b]/20 outline-none transition-all" placeholder="DNI" maxLength="8" />
                                         </div>
 
 
@@ -218,7 +236,7 @@ function añadirVeterinario() {
                                     </div> */}
                                         <div className="flex flex-col gap-2">
                                             <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1">Teléfono Móvil</label>
-                                            <input onChange={(e) => setTelefono(e.target.value)} className="w-full rounded-2xl border-slate-100 bg-[#f8fafc] h-12 px-5 font-bold focus:ring-2 focus:ring-[#13ec5b]/20 outline-none transition-all" placeholder="+54 9 .." type="tel" />
+                                            <input onChange={(e) => setTelefono(e.target.value)} className="w-full rounded-2xl border-slate-100 bg-[#f8fafc] h-12 px-5 font-bold focus:ring-2 focus:ring-[#13ec5b]/20 outline-none transition-all" placeholder="+54 9 .." type="tel" maxLength="15" />
                                         </div>
                                         <div className="flex flex-col gap-2">
                                             <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1">Fecha de Nacimiento</label>

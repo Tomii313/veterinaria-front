@@ -128,7 +128,7 @@ function AgregarPaciente() {
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <label className="flex flex-col gap-2">
                                             <span className="text-sm font-bold text-slate-700">Nombre de la Mascota <span className="text-red-500">*</span></span>
-                                            <input value={nombre} onChange={(e) => setNombre(e.target.value)} className="w-full rounded-xl border-slate-200 bg-white text-slate-900 focus:border-[#13ec5b] focus:ring-[#13ec5b]/20 h-12 px-4 placeholder:text-slate-300 text-sm transition-all" placeholder="Ej. Firulais" required type="text" />
+                                            <input value={nombre} onChange={(e) => setNombre(e.target.value)} className="w-full rounded-xl border-slate-200 bg-white text-slate-900 focus:border-[#13ec5b] focus:ring-[#13ec5b]/20 h-12 px-4 placeholder:text-slate-300 text-sm transition-all" placeholder="Ej. Firulais" required type="text" maxLength={25} />
                                         </label>
                                         <label className="flex flex-col gap-2">
                                             <span className="text-sm font-bold text-slate-700">Especie <span className="text-red-500">*</span></span>
@@ -142,18 +142,18 @@ function AgregarPaciente() {
                                         </label>
                                         <label className="flex flex-col gap-2">
                                             <span className="text-sm font-bold text-slate-700">Peso <span className="text-red-500">*</span></span>
-                                            <input value={peso} onChange={(e) => setPeso(e.target.value)} className="w-full rounded-xl border-slate-200 bg-white text-slate-900 focus:border-[#13ec5b] focus:ring-[#13ec5b]/20 h-12 px-4 placeholder:text-slate-300 text-sm transition-all" placeholder="Ej. 5 kg" type="number" />
+                                            <input value={peso} onChange={(e) => setPeso(e.target.value)} className="w-full rounded-xl border-slate-200 bg-white text-slate-900 focus:border-[#13ec5b] focus:ring-[#13ec5b]/20 h-12 px-4 placeholder:text-slate-300 text-sm transition-all" placeholder="Ej. 5 kg" type="number" min={0} max={100} />
                                         </label>
                                     </div>
 
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <label className="flex flex-col gap-2">
                                             <span className="text-sm font-bold text-slate-700">Raza</span>
-                                            <input value={raza} onChange={(e) => setRaza(e.target.value)} className="w-full rounded-xl border-slate-200 bg-white text-slate-900 focus:border-[#13ec5b] focus:ring-[#13ec5b]/20 h-12 px-4 placeholder:text-slate-300 text-sm transition-all" placeholder="Ej. Labrador, Siamés..." type="text" />
+                                            <input value={raza} onChange={(e) => setRaza(e.target.value)} className="w-full rounded-xl border-slate-200 bg-white text-slate-900 focus:border-[#13ec5b] focus:ring-[#13ec5b]/20 h-12 px-4 placeholder:text-slate-300 text-sm transition-all" placeholder="Ej. Labrador, Siamés..." type="text" maxLength={40} />
                                         </label>
                                         <label className="flex flex-col gap-2">
                                             <span className="text-sm font-bold text-slate-700">Edad</span>
-                                            <input value={edad} onChange={(e) => setEdad(e.target.value)} placeholder="Ingrese edad" className="w-full rounded-xl border-slate-200 bg-white text-slate-900 focus:border-[#13ec5b] focus:ring-[#13ec5b]/20 h-12 px-4 text-sm text-slate-400 transition-all" type="integer" />
+                                            <input value={edad} onChange={(e) => setEdad(e.target.value)} placeholder="Ingrese edad" className="w-full rounded-xl border-slate-200 bg-white text-slate-900 focus:border-[#13ec5b] focus:ring-[#13ec5b]/20 h-12 px-4 text-sm text-slate-400 transition-all" type="integer" min={0} max={100} />
                                         </label>
                                     </div>
 

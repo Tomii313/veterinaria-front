@@ -18,7 +18,7 @@ function ModificarPersonal() {
             )
         )
     }
-    const accessToken = localStorage.getItem("accessToken")
+    const accessToken = localStorage.getItem("access")
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/personal/`, {
@@ -76,7 +76,7 @@ function ModificarPersonal() {
         e.preventDefault()
 
         // Veterinario
-        await fetch(`${import.meta.env.VITE_API_URL}/veterinarios/${id}/`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/veterinarios/${id}/`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json", "Authorization": `Bearer ${accessToken}` },
             body: JSON.stringify({
@@ -90,7 +90,7 @@ function ModificarPersonal() {
 
         // Horarios
         for (const horario of horarios) {
-            await fetch(`${import.meta.env.VITE_API_URL}/horarios/${horario.id}/`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/horarios/${horario.id}/`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json", "Authorization": `Bearer ${accessToken}` },
                 body: JSON.stringify({
@@ -101,14 +101,33 @@ function ModificarPersonal() {
             })
         }
 
+        if (!response.ok) {
+            const errorData = await response.json()
+            throw new Error(Object.values(errorData)[0][0])
+        }
+
         Swal.fire({
-            title: "Listo",
-            text: "Veterinario y horarios actualizados",
-            icon: "success"
+            icon: 'success',
+            title: 'Veterinario actualizado',
+            showConfirmButton: false,
+            timer: 1500
         })
 
         navigate("/personal")
+
+            .catch(error => {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            })
+
+
     }
+
 
     return (
         <div className="flex h-screen w-full overflow-hidden bg-white font-['Manrope',_sans-serif] text-[#111813]">
@@ -173,19 +192,19 @@ function ModificarPersonal() {
                             <div className="rounded-3xl border border-slate-100 bg-white p-8 shadow-sm">
                                 <div className="flex flex-col items-center gap-8 sm:flex-row sm:items-center">
                                     <div className="relative group cursor-pointer">
-                                        <div className="h-32 w-32 overflow-hidden rounded-full border-4 border-[#f8fafc] shadow-lg">
+                                        {/*  <div className="h-32 w-32 overflow-hidden rounded-full border-4 border-[#f8fafc] shadow-lg">
                                             <img src="" alt="Dr" className="h-full w-full object-cover transition-transform group-hover:scale-105" />
-                                        </div>
-                                        <div className="absolute bottom-0 right-0 flex h-10 w-10 items-center justify-center rounded-full bg-[#13ec5b] text-white shadow-lg">
+                                        </div> */}
+                                        {/*  <div className="absolute bottom-0 right-0 flex h-10 w-10 items-center justify-center rounded-full bg-[#13ec5b] text-white shadow-lg">
                                             <span className="material-symbols-outlined text-xl"></span>
-                                        </div>
+                                        </div> */}
                                     </div>
                                     <div className="flex-1 text-center sm:text-left">
                                         <h3 className="text-2xl font-black text-slate-900 mb-1">Dr {nombre} {apellido}</h3>
 
-                                        <button className="rounded-xl bg-slate-50 px-6 py-2.5 text-sm font-black text-slate-600 hover:bg-[#eefdf3] hover:text-[#13ec5b] transition-all border border-slate-100">
+                                        {/*  <button className="rounded-xl bg-slate-50 px-6 py-2.5 text-sm font-black text-slate-600 hover:bg-[#eefdf3] hover:text-[#13ec5b] transition-all border border-slate-100">
                                             Cambiar Foto
-                                        </button>
+                                        </button> */}
                                     </div>
                                 </div>
                             </div>
@@ -202,26 +221,25 @@ function ModificarPersonal() {
                                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                                             <div className="text-left">
                                                 <label className="mb-2 block text-[11px] font-black text-slate-400 uppercase tracking-widest">Nombre</label>
-                                                <input value={nombre} onChange={(e) => setNombre(e.target.value)} className="w-full rounded-2xl border-none bg-slate-50 px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-[#13ec5b]/20" type="text" defaultValue="Juan" />
+                                                <input value={nombre} onChange={(e) => setNombre(e.target.value)} className="w-full rounded-2xl border-none bg-slate-50 px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-[#13ec5b]/20" type="text" defaultValue="Juan" maxLength={50} />
                                             </div>
                                             <div className="text-left">
                                                 <label className="mb-2 block text-[11px] font-black text-slate-400 uppercase tracking-widest">Apellidos</label>
-                                                <input value={apellido} onChange={(e) => setApellido(e.target.value)} className="w-full rounded-2xl border-none bg-slate-50 px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-[#13ec5b]/20" type="text" defaultValue="Pérez García" />
+                                                <input value={apellido} onChange={(e) => setApellido(e.target.value)} className="w-full rounded-2xl border-none bg-slate-50 px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-[#13ec5b]/20" type="text" defaultValue="Pérez García" maxLength={50} />
                                             </div>
                                         </div>
-                                        <div className="text-left">
-                                            <label className="mb-2 block text-[11px] font-black text-slate-400 uppercase tracking-widest">Correo Electrónico</label>
-                                            {/*  <div className="relative">
-                                                <span className="absolute left-4 top-3 material-symbols-outlined text-[20px] text-slate-400">mail</span>
-                                                <input value={email} onChange={(e) => setEmail(e.target.value)} className="w-full rounded-2xl border-none bg-slate-50 pl-12 pr-5 py-3 text-sm font-bold focus:ring-2 focus:ring-[#13ec5b]/20" type="email" defaultValue="juan.perez@clinicavet.com" />
-                                            </div> */}
-                                        </div>
+
                                         <div className="text-left">
                                             <label className="mb-2 block text-[11px] font-black text-slate-400 uppercase tracking-widest">Teléfono</label>
                                             <div className="relative">
                                                 <span className="absolute left-4 top-3 material-symbols-outlined text-[20px] text-slate-400">call</span>
-                                                <input value={telefono} onChange={(e) => setTelefono(e.target.value)} className="w-full rounded-2xl border-none bg-slate-50 pl-12 pr-5 py-3 text-sm font-bold focus:ring-2 focus:ring-[#13ec5b]/20" type="tel" defaultValue="+34 600 123 456" />
+                                                <input value={telefono} onChange={(e) => setTelefono(e.target.value)} className="w-full rounded-2xl border-none bg-slate-50 pl-12 pr-5 py-3 text-sm font-bold focus:ring-2 focus:ring-[#13ec5b]/20" type="tel" defaultValue="+34 600 123 456" maxLength={15} />
                                             </div>
+
+                                        </div>
+                                        <div className="flex flex-col gap-2">
+                                            <label className="text-[11px] font-black text-slate-500 uppercase tracking-widest px-1">DNI / Cédula</label>
+                                            <input value={dni} onChange={(e) => setDni(e.target.value)} className="w-full rounded-2xl border border-slate-100 bg-[#f1f5f3] px-5 py-3 text-slate-400 font-bold cursor-not-allowed" readOnly />
                                         </div>
                                     </div>
                                 </div>
