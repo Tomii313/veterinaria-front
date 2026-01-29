@@ -122,7 +122,8 @@ function Personal() {
                     text: "El veterinario ha sido eliminado",
                     icon: "success"
                 });
-                navigate("/personal")
+                setVeterinarios(prev => prev.filter(d => d.id !== id));
+
             }
         });
     }

@@ -112,14 +112,16 @@ const Internaciones = () => {
                             <h1 className="text-[#111813] text-4xl font-black tracking-tight leading-tight">Estado de Jaulas y Pacientes</h1>
                             <p className="text-[#61896f] text-lg font-medium">Gestión operativa de hospitalización en tiempo real</p>
                         </div>
-                        <div className="flex gap-3">
+                        {/* <div className="flex gap-3">
                             <button className="flex items-center gap-2 px-5 py-2.5 bg-white border border-[#dbe6df] rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
                                 <span className="material-symbols-outlined text-[20px]">filter_list</span> Filtrar
                             </button>
+
                             <button className="flex items-center gap-2 px-5 py-2.5 bg-white border border-[#dbe6df] rounded-xl text-sm font-bold text-slate-700 hover:bg-slate-50 transition-all shadow-sm">
                                 <span className="material-symbols-outlined text-[20px]">sync</span> Actualizar
                             </button>
-                        </div>
+
+                        </div> */}
                     </div>
 
                     {/* Tarjetas de Resumen */}
@@ -256,44 +258,8 @@ const Internaciones = () => {
                         </div>
                     </div>
 
-                    {/* Acciones Globales */}
-                    <div className="mt-12 text-left px-4">
-                        <h2 className="text-[#111813] text-2xl font-black tracking-tight mb-8 flex items-center gap-3">
-                            <span className="material-symbols-outlined text-[#13ec5b] text-3xl">bolt</span>
-                            Acciones Globales
-                        </h2>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
-                            <button className="flex items-center gap-5 p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:border-[#13ec5b] hover:shadow-xl transition-all group">
-                                <div className="size-14 rounded-2xl bg-[#eefdf3] flex items-center justify-center text-[#13ec5b] group-hover:bg-[#13ec5b] group-hover:text-white transition-colors">
-                                    <span className="material-symbols-outlined text-[32px]">print</span>
-                                </div>
-                                <div className="text-left">
-                                    <p className="font-black text-slate-800 text-sm uppercase tracking-tight">Imprimir Reporte</p>
-                                    <p className="text-xs text-[#61896f] font-bold">Resumen de guardia actual</p>
-                                </div>
-                            </button>
-                            <button className="flex items-center gap-5 p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:border-[#13ec5b] hover:shadow-xl transition-all group">
-                                <div className="size-14 rounded-2xl bg-[#eefdf3] flex items-center justify-center text-[#13ec5b] group-hover:bg-[#13ec5b] group-hover:text-white transition-colors">
-                                    <span className="material-symbols-outlined text-[32px]">notifications</span>
-                                </div>
-                                <div className="text-left">
-                                    <p className="font-black text-slate-800 text-sm uppercase tracking-tight">Notificar Propietarios</p>
-                                    <p className="text-xs text-[#61896f] font-bold">Envío masivo de estatus</p>
-                                </div>
-                            </button>
-                            <button className="flex items-center gap-5 p-6 bg-white border border-slate-100 rounded-3xl shadow-sm hover:border-[#13ec5b] hover:shadow-xl transition-all group">
-                                <div className="size-14 rounded-2xl bg-[#eefdf3] flex items-center justify-center text-[#13ec5b] group-hover:bg-[#13ec5b] group-hover:text-white transition-colors">
-                                    <span className="material-symbols-outlined text-[32px]">inventory</span>
-                                </div>
-                                <div className="text-left">
-                                    <p className="font-black text-slate-800 text-sm uppercase tracking-tight">Auditoría Insumos</p>
-                                    <p className="text-xs text-[#61896f] font-bold">Revisar stock de medicación</p>
-                                </div>
-                            </button>
 
-                        </div>
 
-                    </div>
 
                 </div>
             </main >

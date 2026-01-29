@@ -68,6 +68,7 @@ function Pacientes() {
                     "Authorization": `Bearer ${accessToken}`,
 
                 },
+
             })
                 .then(res => res.json())
                 .then(data => {
@@ -75,6 +76,7 @@ function Pacientes() {
                     setMessageError(""); // limpiamos mensaje de error
                 })
                 .catch(err => setMessageError("Error al cargar los pacientes"));
+
             return;
         }
 
@@ -87,7 +89,7 @@ function Pacientes() {
                 return res.json();
             })
             .then(data => {
-                setPacientes(data);
+                setPacientes(data.results ?? data);
                 setMessageError(""); // limpiamos mensaje si todo ok
             })
             .catch(err => {
@@ -141,35 +143,45 @@ function Pacientes() {
     function filtrarestado() {
         if (estado.trim() === "") {
             fetch(`${import.meta.env.VITE_API_URL}/animales/?page=${page}`, {
-                method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${accessToken}`,
-
                 },
             })
                 .then(res => res.json())
                 .then(data => {
-                    setPacientes(data.results ?? data)
-                    setMessageError("")
+                    setPacientes(data.results ?? data);
+                    setMessageError("");
                 })
-                .catch(err => setMessageError("Error al cargar los pacientes"))
+                .catch(err => {
+                    setPacientes([]); // siempre aseguramos que sea un array
+                    setMessageError("Error al cargar los pacientes");
+                });
             return;
         }
+
         fetch(`${import.meta.env.VITE_API_URL}/animales/filtrar_estado/?estado=${estado}`, {
-            method: "GET",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`,
-
             },
         })
-            .then(res => res.json())
-            .then(data => {
-                setPacientes(data.results ?? data)
-                setMessageError("")
+            .then(res => {
+                if (res.status === 404) {
+                    // si no hay resultados, devolvemos array vacío
+                    return { results: [] };
+                }
+                if (!res.ok) throw new Error("Error al cargar los pacientes");
+                return res.json();
             })
-            .catch(err => setMessageError("Error al cargar los pacientes"));
+            .then(data => {
+                setPacientes(data.results ?? data); // ahora siempre será array
+                setMessageError("");
+            })
+            .catch(err => {
+                setPacientes([]); // fallback por si hay otro error
+                setMessageError(err.message);
+            });
     }
 
     useEffect(() => {

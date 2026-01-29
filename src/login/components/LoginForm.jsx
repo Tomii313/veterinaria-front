@@ -9,6 +9,7 @@ function LoginForm() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [olvidarContraseña, setOlvidarContraseña] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -119,14 +120,22 @@ function LoginForm() {
                     </div>
 
                     {/* Forgot */}
-                    <div className="flex justify-end">
-                        <a
-                            href="#"
-                            className="text-sm font-semibold text-text-sub-light hover:text-primary"
-                        >
-                            ¿Olvidaste tu contraseña?
-                        </a>
-                    </div>
+
+
+
+                    {!olvidarContraseña ? (
+                        <div className="flex justify-end">
+                            <button type="button" onClick={() => setOlvidarContraseña(true)}
+                                className="text-sm font-semibold text-text-sub-light hover:text-primary"
+                            >
+                                ¿Olvidaste tu contraseña?
+                            </button>
+                        </div>
+                    ) : (
+                        <p className="text-sm text-slate-500 font-semibold">Solicite un cambio de contraseña a soporte@vetmanager.com</p>
+                    )}
+
+
 
                     {/* Submit */}
                     <button

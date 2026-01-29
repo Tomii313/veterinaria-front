@@ -243,7 +243,7 @@ function Inicio() {
                                 <div className="bg-blue-50 p-2 rounded-lg text-blue-600">
                                     <span className="material-symbols-outlined">calendar_month</span>
                                 </div>
-                                <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded">+12%</span>
+
                             </div>
                             <p className="text-[#61896f] text-sm font-medium">Citas Hoy</p>
                             <h3 className="text-2xl font-bold mt-1">{turnosFecha}</h3>
@@ -254,7 +254,7 @@ function Inicio() {
                                 <div className="bg-purple-50 p-2 rounded-lg text-purple-600">
                                     <span className="material-symbols-outlined">local_hospital</span>
                                 </div>
-                                <span className="text-xs font-bold text-gray-500 bg-gray-100 px-2 py-1 rounded">Activos</span>
+
                             </div>
                             <p className="text-[#61896f] text-sm font-medium">Hospitalizados</p>
                             <h3 className="text-2xl font-bold mt-1">{internados}</h3>

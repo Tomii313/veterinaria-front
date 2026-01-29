@@ -10,14 +10,25 @@ function ModificarPersonal() {
     const [telefono, setTelefono] = useState("")
     const [email, setEmail] = useState("")
     const [nacimiento, setNacimiento] = useState("")
-    const [horarios, setHorarios] = useState([])
-    const actualizarHorario = (id, campo, valor) => {
-        setHorarios(prev =>
-            prev.map(h =>
-                h.id === id ? { ...h, [campo]: valor } : h
-            )
-        )
+    const [horarios, setHorarios] = useState({
+        Lunes: { id: null, activo: false, inicio: "", fin: "" },
+        Martes: { id: null, activo: false, inicio: "", fin: "" },
+        Miercoles: { id: null, activo: false, inicio: "", fin: "" },
+        Jueves: { id: null, activo: false, inicio: "", fin: "" },
+        Viernes: { id: null, activo: false, inicio: "", fin: "" },
+        Sabado: { id: null, activo: false, inicio: "", fin: "" },
+        Domingo: { id: null, activo: false, inicio: "", fin: "" },
+    })
+    const actualizarHorario = (dia, campo, valor) => {
+        setHorarios(prev => ({
+            ...prev,
+            [dia]: {
+                ...prev[dia],
+                [campo]: valor,
+            }
+        }))
     }
+
     const accessToken = localStorage.getItem("access")
 
     useEffect(() => {
@@ -58,18 +69,28 @@ function ModificarPersonal() {
                 setNacimiento(data.nacimiento)
             })
         fetch(`${import.meta.env.VITE_API_URL}/horarios/?veterinario=${id}`, {
-            method: "GET",
             headers: {
-                "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`,
-
             },
         })
             .then(res => res.json())
             .then(data => {
-                setHorarios(data)
+                const copia = { ...horarios }
+
+                data.forEach(h => {
+                    copia[h.dias] = {
+                        id: h.id,
+                        activo: true,
+                        inicio: h.hora_inicio,
+                        fin: h.hora_fin,
+                    }
+                })
+
+                setHorarios(copia)
             })
     }, [id])
+
+
 
 
     const handleSubmit = async (e) => {
@@ -89,17 +110,42 @@ function ModificarPersonal() {
         })
 
         // Horarios
-        for (const horario of horarios) {
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/horarios/${horario.id}/`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json", "Authorization": `Bearer ${accessToken}` },
-                body: JSON.stringify({
-                    dias: horario.dias,
-                    hora_inicio: horario.hora_inicio,
-                    hora_fin: horario.hora_fin
-                })
-            })
+        for (const [dia, h] of Object.entries(horarios)) {
+            if (h.activo) {
+                if (h.id) {
+                    // Ya existe → PATCH
+                    await fetch(`${import.meta.env.VITE_API_URL}/horarios/${h.id}/`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${accessToken}`,
+                        },
+                        body: JSON.stringify({
+                            dias: dia,
+                            hora_inicio: h.inicio,
+                            hora_fin: h.fin,
+                        }),
+                    });
+                } else {
+                    // No existe → POST
+                    await fetch(`${import.meta.env.VITE_API_URL}/horarios/`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${accessToken}`,
+                        },
+                        body: JSON.stringify({
+                            veterinario: id,
+                            dias: dia,
+                            hora_inicio: h.inicio,
+                            hora_fin: h.fin,
+                        }),
+                    });
+                }
+            }
         }
+
+
 
         if (!response.ok) {
             const errorData = await response.json()
@@ -248,43 +294,38 @@ function ModificarPersonal() {
 
                             </div>
 
-                            {/* Horario de Atención */}
-                            {horarios.map((horario) => (
-                                <div key={horario.id} className="grid grid-cols-12 gap-4">
-
-                                    <div className="col-span-4">
+                            {/* HORARIOS LABORALES */}
+                            {Object.entries(horarios).map(([dia, h]) => (
+                                <div key={dia} className="bg-white p-4 rounded-2xl shadow-sm">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <span className="font-black text-slate-700 text-sm">{dia}</span>
                                         <input
-                                            type="text"
-                                            value={horario.dias}
-                                            onChange={(e) =>
-                                                actualizarHorario(horario.id, 'dias', e.target.value)
-                                            }
-                                            className="w-full"
+                                            type="checkbox"
+                                            checked={h.activo}
+                                            onChange={e => actualizarHorario(dia, "activo", e.target.checked)}
                                         />
                                     </div>
 
-                                    <div className="col-span-4">
+                                    <div className="flex items-center gap-2">
                                         <input
                                             type="time"
-                                            value={horario.hora_inicio}
-                                            onChange={(e) =>
-                                                actualizarHorario(horario.id, 'hora_inicio', e.target.value)
-                                            }
+                                            value={h.inicio}
+                                            disabled={!h.activo}
+                                            onChange={e => actualizarHorario(dia, "inicio", e.target.value)}
+                                            className="flex-1 bg-slate-50 rounded-xl px-2 py-2 text-xs font-bold"
                                         />
-                                    </div>
-
-                                    <div className="col-span-4">
+                                        <span>-</span>
                                         <input
                                             type="time"
-                                            value={horario.hora_fin}
-                                            onChange={(e) =>
-                                                actualizarHorario(horario.id, 'hora_fin', e.target.value)
-                                            }
+                                            value={h.fin}
+                                            disabled={!h.activo}
+                                            onChange={e => actualizarHorario(dia, "fin", e.target.value)}
+                                            className="flex-1 bg-slate-50 rounded-xl px-2 py-2 text-xs font-bold"
                                         />
                                     </div>
-
                                 </div>
                             ))}
+
 
                             {/* Botones Finales */}
                             <div className="mt-4 flex items-center justify-end gap-4 text-left">
