@@ -23,7 +23,9 @@ const Citas = () => {
     const canAdd = permisos.includes("turnos.add_turno")
     const canDelete = permisos.includes("turnos.delete_turno")
     const canChange = permisos.includes("turnos.change_turno")
-
+    const [resultados, setResultados] = useState([]);
+    const [texto, setTexto] = useState("");
+    const [animalSeleccionado, setAnimalSeleccionado] = useState(null)
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/permisos/`, {
@@ -88,11 +90,7 @@ const Citas = () => {
     const guardarTurno = async () => {
         // Validaciones básicas antes de mandar
         if (esCliente === true) {
-            if (!duenio || !duenio.id) {
-                alert("Primero debés buscar y seleccionar un dueño");
-                return;
-            }
-            if (!animal || !animal.id) {
+            if (!animalSeleccionado || !animalSeleccionado.id) {
                 alert("Seleccioná una mascota");
                 return;
             }
@@ -114,7 +112,7 @@ const Citas = () => {
                     veterinario: Number(veterinario),
                     hora: hora,
                     motivo: motivo,
-                    animal: esCliente ? animal?.id : null,
+                    animal: esCliente ? animalSeleccionado?.id : null,
                     nombre_animal: nombreAnimal
                 })
             });
@@ -212,40 +210,24 @@ const Citas = () => {
 
 
 
-    function filtrar_dni() {
+    const buscarAnimales = async (texto) => {
+        if (texto.length < 2) {
+            setResultados([]);
+            return;
+        }
 
-        try {
-            fetch(`${import.meta.env.VITE_API_URL}/duenios/filtrar_dni/?dni=${dni}`, {
+        const res = await fetch(
+            `${import.meta.env.VITE_API_URL}/animales/?search=${texto}`,
+            {
                 headers: {
                     "Authorization": `Bearer ${accessToken}`,
                 },
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (!Array.isArray(data) || data.length === 0) {
-                        setDuenio(null)
-                        setAnimales([])
-                        alert("Propietario no encontrado")
-                        return
-                    }
+            }
+        );
 
-                    const duenioEncontrado = data[0]
-                    setDuenio(duenioEncontrado)
-
-                    // 🔥 TRAER ANIMALES DE ESE DUEÑO
-                    fetch(`${import.meta.env.VITE_API_URL}/animales/?duenio=${duenioEncontrado.id}`)
-                        .then(res => res.json())
-                        .then(data => setAnimales(data.results || []))
-                })
-
-
-                .catch(error => {
-                    console.log(error)
-                })
-        } catch (error) {
-            console.log(error)
-        }
-    }
+        const data = await res.json();
+        setResultados(data.results ?? data);
+    };
     function cancelarTurno(turnoId) {
         Swal.fire({
             title: "Cancelar Turno?",
@@ -637,27 +619,48 @@ const Citas = () => {
                                 <>
                                     <div className="relative">
                                         <input
-                                            value={dni}
-                                            onChange={(e) => setDni(e.target.value)}
                                             className="w-full bg-slate-100 dark:bg-gray-800 rounded-xl py-3 px-4 pr-12 dark:text-white"
-                                            placeholder="Buscar dueño por DNI"
                                             type="text"
-                                        />
+                                            value={texto}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                setTexto(value);
+                                                buscarAnimales(value);
+                                            }}
+                                            placeholder="Buscar mascota por nombre o dueño..."
 
-                                        <button
-                                            type="button"
-                                            onClick={filtrar_dni}
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-[#13ec5b]"
-                                        >
-                                            <span className="material-symbols-outlined">search</span>
-                                        </button>
+                                        />
+                                        {resultados.length > 0 && (
+                                            <div className="mt-2 bg-white border rounded-xl shadow-md overflow-hidden">
+                                                {resultados.map(animal => (
+                                                    <div
+                                                        key={animal.id}
+                                                        onClick={() => {
+                                                            setAnimalSeleccionado(animal);
+                                                            setTexto(animal.nombre);
+                                                            setResultados([]);
+                                                        }}
+                                                        className="px-4 py-3 hover:bg-slate-100 cursor-pointer text-sm"
+                                                    >
+                                                        <p className="font-bold">
+                                                            {animal.nombre}
+                                                        </p>
+                                                        <p className="text-xs text-slate-500">
+                                                            {animal.duenio_nombre} {animal.duenio_apellido} • {animal.raza}
+                                                        </p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+
+
                                     </div>
 
-                                    {duenio && (
+                                    {/*  {duenio && (
                                         <div className="p-3 rounded-lg bg-green-100 text-green-800 text-sm font-bold">
                                             Dueño encontrado: {duenio.nombre} {duenio.apellido}
                                         </div>
-                                    )}
+                                    )} */}
 
                                     {animales.length > 0 && (
                                         <select
