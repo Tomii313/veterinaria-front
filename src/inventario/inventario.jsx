@@ -182,10 +182,7 @@ const InventarioSuministros = () => {
                             </a>
                         </nav>
                     </div>
-                    <div className="p-5 bg-[#eefdf3] rounded-2xl border border-[#13ec5b]/10 text-left">
-                        <p className="text-[10px] font-black text-slate-800 mb-2 uppercase tracking-tighter">Ayuda Soporte</p>
-                        <button className="text-xs text-[#13ec5b] font-black hover:underline">Contactar Soporte Técnico</button>
-                    </div>
+
                 </aside>
 
                 {/* Contenido Principal */}
@@ -198,9 +195,9 @@ const InventarioSuministros = () => {
                             <p className="text-[#61896f] text-base font-medium">Gestión integral y control de insumos médicos para uso clínico diario.</p>
                         </div>
                         <div className="flex gap-3">
-                            <button className="flex items-center justify-center rounded-xl h-11 px-5 bg-white border border-[#dbe6df] text-slate-700 font-bold text-sm hover:bg-slate-50 transition-all shadow-sm">
+                            {/*  <button className="flex items-center justify-center rounded-xl h-11 px-5 bg-white border border-[#dbe6df] text-slate-700 font-bold text-sm hover:bg-slate-50 transition-all shadow-sm">
                                 <span className="material-symbols-outlined mr-2 text-[20px]">download</span> Exportar
-                            </button>
+                            </button> */}
                             <Link to="/inventario/agregar">
                                 <button className="flex items-center justify-center rounded-xl h-11 px-6 bg-[#13ec5b] text-white font-black text-sm shadow-lg shadow-[#13ec5b]/20 hover:scale-[1.02] transition-transform active:scale-95">
                                     <span className="material-symbols-outlined mr-2 text-[20px]">add_circle</span> Agregar Insumo

@@ -240,34 +240,12 @@ function AgregarProducto() {
                     </div>
 
                     {/* Sección de Tips Informativos */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4 pb-12">
-                        <div className="flex gap-4 p-5 rounded-2xl bg-white border border-slate-100 shadow-sm">
-                            <span className="material-symbols-outlined text-[#13ec5b] text-[28px]">verified</span>
-                            <div className="text-left">
-                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Control Preciso</h4>
-                                <p className="text-[11px] text-slate-600 font-bold leading-relaxed">El stock se actualizará automáticamente con cada uso en citas.</p>
-                            </div>
-                        </div>
-                        <div className="flex gap-4 p-5 rounded-2xl bg-white border border-slate-100 shadow-sm">
-                            <span className="material-symbols-outlined text-[#13ec5b] text-[28px]">notifications_active</span>
-                            <div className="text-left">
-                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Alertas</h4>
-                                <p className="text-[11px] text-slate-600 font-bold leading-relaxed">Recibirás avisos cuando el stock sea menor a 10 unidades.</p>
-                            </div>
-                        </div>
-                        <div className="flex gap-4 p-5 rounded-2xl bg-white border border-slate-100 shadow-sm">
-                            <span className="material-symbols-outlined text-[#13ec5b] text-[28px]">history</span>
-                            <div className="text-left">
-                                <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-1">Trazabilidad</h4>
-                                <p className="text-[11px] text-slate-600 font-bold leading-relaxed">Cada cambio en el inventario quedará registrado en el historial.</p>
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </main>
 
             <footer className="py-8 px-10 text-center text-slate-400 text-[11px] font-black uppercase tracking-widest">
-                <p>© 2024 VetManager Software de Gestión Veterinaria. Todos los derechos reservados.</p>
+                <p>© 2026 VetManager Software de Gestión Veterinaria. Todos los derechos reservados.</p>
             </footer>
         </div>
     );
