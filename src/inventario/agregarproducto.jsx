@@ -40,25 +40,28 @@ function AgregarProducto() {
         fetch(`${import.meta.env.VITE_API_URL}/productos/`, {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`,
-
             },
             body: formData
         })
-            .then(res => res.json())
-            .then(data => console.log(data))
-            .then(response => {
-                if (response.ok) {
-                    Swal.fire({
-                        title: "¡Creado!",
-                        text: "El producto se ha creado correctamente.",
-                        icon: "success"
-                    });
-                    navigate("/inventario");
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error("Error al crear producto");
                 }
+                return res.json();
             })
-            .catch(err => console.log(err))
+            .then(data => {
+                Swal.fire({
+                    title: "¡Creado!",
+                    text: "El producto se ha creado correctamente.",
+                    icon: "success"
+                });
+                navigate("/inventario");
+            })
+            .catch(err => {
+                console.error(err);
+            });
+
     }
 
 
