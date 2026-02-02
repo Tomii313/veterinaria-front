@@ -264,19 +264,14 @@ function Estudios() {
                                             <p className="text-sm text-slate-500 font-medium line-clamp-1 max-w-xs">{estudio.informe}</p>
                                         </td>
                                         <td className="px-6 py-5 text-right">
-                                            {estudio.archivo ? (
-                                                <a
-                                                    href={estudio.archivo}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    download // Esto le dice al navegador "intentá descargarlo"
-                                                    className="text-slate-400 hover:text-[#13ec5b] transition-colors"
-                                                >
-                                                    <span className="material-symbols-outlined">download</span>
-                                                </a>
-                                            ) : (
-                                                <span className="text-slate-300 italic text-xs">Sin archivo</span>
-                                            )}
+                                            <a
+                                                href={estudio.archivo}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-slate-400 hover:text-[#13ec5b]"
+                                            >
+                                                <span className="material-symbols-outlined">open_in_new</span>
+                                            </a>
                                         </td>
                                     </tr>
                                 ))}
