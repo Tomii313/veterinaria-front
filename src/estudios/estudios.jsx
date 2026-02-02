@@ -41,7 +41,7 @@ function Estudios() {
             })
                 .then(res => res.json())
                 .then(data => {
-                    setEstudios(data.results ?? data);
+                    setEstudios(data.results || []);
                     setTotalPages(Math.ceil(data.count / 10))
                 });
         } catch (error) {
@@ -61,7 +61,7 @@ function Estudios() {
             )
                 .then(res => res.json())
                 .then(data => {
-                    setEstudios(data.results ?? data);
+                    setEstudios(data.results || []);
                     setTotalPages(Math.ceil(data.count / 10))
                 });
         } catch (error) {
@@ -81,7 +81,7 @@ function Estudios() {
             )
                 .then(res => res.json())
                 .then(data => {
-                    setEstudios(data.results ?? data);
+                    setEstudios(data.results || []);
                     setTotalPages(Math.ceil(data.count / 10))
                 });
         } catch (error) {
@@ -115,7 +115,7 @@ function Estudios() {
             })
                 .then(res => res.json())
                 .then(data => {
-                    setEstudios(data.results ?? data)
+                    setEstudios(data.results || [])
                     setTotalPages(Math.ceil(data.count / 10))
                 })
         } catch (error) {
