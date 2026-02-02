@@ -58,7 +58,7 @@ function Pacientes() {
         }
     }, [page])
 
-    function buscar() {
+    /* function buscar() {
         if (busqueda.trim() === "") {
             // si el input está vacío, recargamos todos
             fetch(`${import.meta.env.VITE_API_URL}/animales/?page=${page}`, {
@@ -78,27 +78,23 @@ function Pacientes() {
                 .catch(err => setMessageError("Error al cargar los pacientes"));
 
             return;
-        }
+        } */
 
-        fetch(`${import.meta.env.VITE_API_URL}/animales/buscar/?nombre=${busqueda}`)
-            .then(res => {
-                if (!res.ok) {
-                    // si status != 2xx, lanzamos el error para catch
-                    return res.json().then(err => { throw err; });
-                }
-                return res.json();
-            })
-            .then(data => {
-                setPacientes(data.results ?? data);
-                setMessageError(""); // limpiamos mensaje si todo ok
-            })
-            .catch(err => {
-                // el backend envía {message: "Mascota no encontrada"}
-                setMessageError(err.message || "Error desconocido");
-                setPacientes([]); // vaciamos la lista si hay error
-            });
-    }
 
+    useEffect(() => {
+        const nombre = busqueda.trim();
+
+        if (nombre === "") return;
+
+        fetch(`${import.meta.env.VITE_API_URL}/animales/?search=${nombre}`, {
+            headers: {
+                "Authorization": `Bearer ${accessToken}`,
+            },
+        })
+            .then(res => res.json())
+            .then(data => setPacientes(data.results ?? []))
+            .catch(() => setPacientes([]));
+    }, [busqueda]);
 
     function buscarespecie() {
         if (especie.trim() === "") {
@@ -257,7 +253,7 @@ function Pacientes() {
                                 value={busqueda}
                                 className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border-none rounded-xl text-sm focus:ring-2 focus:ring-[#13ec5b]/20"
                             />
-                            <button type="button" onClick={buscar} className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">search</button>
+
                         </div>
 
                         <select value={especie} onChange={(e) => setEspecie(e.target.value)} className="bg-white border-slate-200 rounded-xl text-sm px-4 py-2.5 outline-none focus:border-[#13ec5b] transition-all">
@@ -295,10 +291,10 @@ function Pacientes() {
                                         <td className="px-4 py-5">
                                             <div className="flex items-center gap-3">
                                                 {p.especie.toLowerCase() === "perro" ? (
-                                                    <div className="size-10 rounded-full object-cover shadow-sm"><img src="src/dog.png" alt="" /></div>
+                                                    <div className="size-10 rounded-full object-cover shadow-sm"><img src="/dog.png" alt="" /></div>
                                                 ) : (
                                                     p.especie.toLowerCase() === "gato" ? (
-                                                        <div className="size-10 rounded-full object-cover shadow-sm"><img src="src/gato.png" alt="" /></div>
+                                                        <div className="size-10 rounded-full object-cover shadow-sm"><img src="/gato.png" alt="" /></div>
                                                     ) : (
                                                         <div className="size-10 rounded-full object-cover shadow-sm"></div>
                                                     )
