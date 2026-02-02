@@ -265,8 +265,9 @@ function Estudios() {
                                         </td>
                                         <td className="px-6 py-5 text-right">
                                             <a
-                                                href={`${estudio.archivo}?dl=true`}
-                                                className="text-slate-400 hover:text-[#13ec5b]"
+                                                href={estudio.archivo}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
                                             >
                                                 <span className="material-symbols-outlined">download</span>
                                             </a>
