@@ -15,7 +15,23 @@ function Estudios() {
     const [fechaHasta, setFechaHasta] = useState("")
 
 
-
+    const descargarArchivo = async (url, nombre) => {
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            const urlBlob = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = urlBlob;
+            link.setAttribute('download', nombre || 'estudio.pdf');
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+        } catch (error) {
+            console.error("Error descargando:", error);
+            // Si falla el blob (por CORS), al menos que lo abra en otra pestaña
+            window.open(url, '_blank');
+        }
+    };
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/estudios/?fecha__gte=${fechaDesde}&fecha__lte=${fechaHasta}&page=${page}`, {
             headers: {
@@ -245,15 +261,12 @@ function Estudios() {
                                         </td>
                                         <td className="px-6 py-5 text-right">
                                             {estudio.archivo ? (
-                                                <a
-                                                    href={estudio.archivo}
-                                                    download={`estudio_${estudio.animal_nombre}.pdf`} // Sugiere un nombre de archivo
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
+                                                <button
+                                                    onClick={() => descargarArchivo(estudio.archivo, `estudio_${estudio.animal_nombre}.pdf`)}
                                                     className="text-slate-400 hover:text-[#13ec5b] transition-colors"
                                                 >
                                                     <span className="material-symbols-outlined">download</span>
-                                                </a>
+                                                </button>
                                             ) : (
                                                 <span className="text-slate-300 italic text-xs">Sin archivo</span>
                                             )}
