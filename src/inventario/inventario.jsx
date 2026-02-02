@@ -139,6 +139,37 @@ const InventarioSuministros = () => {
             .then(data => setProductos(data.results ?? data))
     }
 
+    function eliminarProducto(id) {
+
+        Swal.fire({
+            title: "Estas seguro?",
+            text: "No podras revertir esto!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Si, eliminarlo!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`${import.meta.env.VITE_API_URL}/productos/${id}/`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${accessToken}`,
+                    }
+
+                })
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "El producto ha sido eliminado",
+                    icon: "success"
+                });
+
+                setProductos(prev => prev.filter(d => d.id !== id));
+            }
+        });
+    }
+
 
     return (
         <div className="bg-white text-[#111813] font-['Manrope',_sans-serif] min-h-screen flex flex-col">
@@ -303,7 +334,11 @@ const InventarioSuministros = () => {
                                             <td className="px-8 py-6">
 
 
-                                                <img src={prod.imagen} alt={prod.nombre} className="w-16 h-16 object-cover" />
+                                                <img
+                                                    src={prod.imagen}
+                                                    alt={prod.nombre}
+                                                    className="w-16 h-16 object-cover"
+                                                />
 
                                             </td>
 
@@ -326,6 +361,9 @@ const InventarioSuministros = () => {
                                                             <span className="material-symbols-outlined">edit</span>
                                                         </button>
                                                     </Link>
+                                                    <button onClick={() => eliminarProducto(prod.id)} className="p-2 rounded-xl text-slate-300 hover:text-[#13ec5b] hover:bg-white hover:shadow-sm transition-all">
+                                                        <span className="material-symbols-outlined">delete</span>
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>
