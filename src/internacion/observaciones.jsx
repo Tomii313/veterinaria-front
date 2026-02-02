@@ -254,9 +254,9 @@ const indicacionesInternado = () => {
                             <button onClick={imprimir} className="flex items-center gap-2 px-6 h-12 rounded-xl bg-white border border-[#f0f4f2] font-bold hover:bg-[#f0f4f2] transition-all shadow-sm">
                                 <span className="material-symbols-outlined">print</span> Imprimir Plan
                             </button>
-                            <button className="flex items-center gap-2 px-8 h-12 rounded-xl bg-[#13ec5b] text-[#102216] font-bold hover:opacity-90 transition-all shadow-xl shadow-[#13ec5b]/30">
+                            {/* <button className="flex items-center gap-2 px-8 h-12 rounded-xl bg-[#13ec5b] text-[#102216] font-bold hover:opacity-90 transition-all shadow-xl shadow-[#13ec5b]/30">
                                 <span className="material-symbols-outlined">save</span> Finalizar y Notificar
-                            </button>
+                            </button> */}
                         </div>
                     </form>
                 </section>

@@ -244,7 +244,7 @@ function Estudios() {
                                             <p className="text-sm text-slate-500 font-medium line-clamp-1 max-w-xs">{estudio.informe}</p>
                                         </td>
                                         <td className="px-6 py-5 text-right">
-                                            <a href={estudio.archivo} download target="_blank" rel="noopener noreferrer"
+                                            <a href={`${estudio.archivo}?fl_attachment`} download target="_blank" rel="noopener noreferrer"
                                                 className="size-9 flex items-center justify-center rounded-xl text-slate-400 hover:bg-white hover:text-[#13ec5b] hover:shadow-sm transition-all ml-auto"
                                                 title="Descargar Informe"
                                             >
