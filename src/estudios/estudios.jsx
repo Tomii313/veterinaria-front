@@ -25,7 +25,7 @@ function Estudios() {
             .then(res => res.json())
             .then(data => {
                 setEstudios(data.results ?? data);
-                setTotalPages(data.count);
+                setTotalPages(Math.ceil(data.count / 10))
             });
     }, [fechaDesde, fechaHasta, page]);
 
@@ -41,7 +41,7 @@ function Estudios() {
             .then(res => res.json())
             .then(data => {
                 setEstudios(data.results ?? data);
-                setTotalPages(data.count);
+                setTotalPages(Math.ceil(data.count / 10))
             });
     }, [tipoestudio, page]);
 
@@ -57,7 +57,7 @@ function Estudios() {
             .then(res => res.json())
             .then(data => {
                 setEstudios(data.results ?? data);
-                setTotalPages(data.count);
+                setTotalPages(Math.ceil(data.count / 10))
             });
     }, [animal, page]);
 
@@ -83,7 +83,7 @@ function Estudios() {
             .then(res => res.json())
             .then(data => {
                 setEstudios(data.results ?? data)
-                setTotalPages(data.count)
+                setTotalPages(Math.ceil(data.count / 10))
             })
     }, [])
 
