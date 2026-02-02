@@ -33,74 +33,94 @@ function Estudios() {
         }
     };
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_API_URL}/estudios/?fecha__gte=${fechaDesde}&fecha__lte=${fechaHasta}&page=${page}`, {
-            headers: {
-                "Authorization": `Bearer ${accessToken}`
-            }
-        })
-            .then(res => res.json())
-            .then(data => {
-                setEstudios(data.results ?? data);
-                setTotalPages(Math.ceil(data.count / 10))
-            });
+        try {
+            fetch(`${import.meta.env.VITE_API_URL}/estudios/?fecha__gte=${fechaDesde}&fecha__lte=${fechaHasta}&page=${page}`, {
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`
+                }
+            })
+                .then(res => res.json())
+                .then(data => {
+                    setEstudios(data.results ?? data);
+                    setTotalPages(Math.ceil(data.count / 10))
+                });
+        } catch (error) {
+            console.error("Error obteniendo estudios:", error);
+        }
     }, [fechaDesde, fechaHasta, page]);
 
     useEffect(() => {
-        fetch(
-            `${import.meta.env.VITE_API_URL}/estudios/?tipo=${tipoestudio}&page=${page}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            }
-        )
-            .then(res => res.json())
-            .then(data => {
-                setEstudios(data.results ?? data);
-                setTotalPages(Math.ceil(data.count / 10))
-            });
+        try {
+            fetch(
+                `${import.meta.env.VITE_API_URL}/estudios/?tipo=${tipoestudio}&page=${page}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            )
+                .then(res => res.json())
+                .then(data => {
+                    setEstudios(data.results ?? data);
+                    setTotalPages(Math.ceil(data.count / 10))
+                });
+        } catch (error) {
+            console.error("Error obteniendo estudios:", error);
+        }
     }, [tipoestudio, page]);
 
     useEffect(() => {
-        fetch(
-            `${import.meta.env.VITE_API_URL}/estudios/?animal__nombre__icontains=${animal}&page=${page}`,
-            {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`,
-                },
-            }
-        )
-            .then(res => res.json())
-            .then(data => {
-                setEstudios(data.results ?? data);
-                setTotalPages(Math.ceil(data.count / 10))
-            });
+        try {
+            fetch(
+                `${import.meta.env.VITE_API_URL}/estudios/?animal__nombre__icontains=${animal}&page=${page}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            )
+                .then(res => res.json())
+                .then(data => {
+                    setEstudios(data.results ?? data);
+                    setTotalPages(Math.ceil(data.count / 10))
+                });
+        } catch (error) {
+            console.error("Error obteniendo estudios:", error);
+        }
     }, [animal, page]);
 
 
 
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_API_URL}/permisos/`, {
-            headers: {
-                "Authorization": `Bearer ${accessToken}`
-            }
-        })
-            .then(res => res.json())
-            .then(data => setPermisos(data))
+        try {
+            fetch(`${import.meta.env.VITE_API_URL}/permisos/`, {
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`
+                }
+            })
+                .then(res => res.json())
+                .then(data => setPermisos(data))
+        } catch (error) {
+            console.error("Error obteniendo permisos:", error);
+        }
     }, [])
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_API_URL}/estudios/`, {
-            headers: {
-                "Authorization": `Bearer ${accessToken}`
-            }
-        })
-            .then(res => res.json())
-            .then(data => {
-                setEstudios(data.results ?? data)
-                setTotalPages(Math.ceil(data.count / 10))
+        try {
+            fetch(`${import.meta.env.VITE_API_URL}/estudios/`, {
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`
+                }
             })
+                .then(res => res.json())
+                .then(data => {
+                    setEstudios(data.results ?? data)
+                    setTotalPages(Math.ceil(data.count / 10))
+                })
+        } catch (error) {
+            console.error("Error obteniendo estudios:", error);
+        }
     }, [])
 
     const colorClasses = {
@@ -261,12 +281,15 @@ function Estudios() {
                                         </td>
                                         <td className="px-6 py-5 text-right">
                                             {estudio.archivo ? (
-                                                <button
-                                                    onClick={() => descargarArchivo(estudio.archivo, `estudio_${estudio.animal_nombre}.pdf`)}
+                                                <a
+                                                    href={estudio.archivo}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    download // Esto le dice al navegador "intentá descargarlo"
                                                     className="text-slate-400 hover:text-[#13ec5b] transition-colors"
                                                 >
                                                     <span className="material-symbols-outlined">download</span>
-                                                </button>
+                                                </a>
                                             ) : (
                                                 <span className="text-slate-300 italic text-xs">Sin archivo</span>
                                             )}
