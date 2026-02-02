@@ -15,13 +15,20 @@ const indicacionesInternado = () => {
     const { id } = useParams();
     const accessToken = localStorage.getItem("access");
 
-    const imprimir = () => {
-        window.open(
+    const imprimir = async () => {
+        const res = await fetch(
             `${import.meta.env.VITE_API_URL}/internaciones/${id}/imprimir/`,
-            "_blank"
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
         );
-    };
 
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        window.open(url);
+    };
 
 
     const handleDarAlta = (internacionId) => {
