@@ -15,23 +15,7 @@ function Estudios() {
     const [fechaHasta, setFechaHasta] = useState("")
 
 
-    const descargarArchivo = async (url, nombre) => {
-        try {
-            const response = await fetch(url);
-            const blob = await response.blob();
-            const urlBlob = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = urlBlob;
-            link.setAttribute('download', nombre || 'estudio.pdf');
-            document.body.appendChild(link);
-            link.click();
-            link.parentNode.removeChild(link);
-        } catch (error) {
-            console.error("Error descargando:", error);
-            // Si falla el blob (por CORS), al menos que lo abra en otra pestaña
-            window.open(url, '_blank');
-        }
-    };
+
     useEffect(() => {
         try {
             fetch(`${import.meta.env.VITE_API_URL}/estudios/?fecha__gte=${fechaDesde}&fecha__lte=${fechaHasta}&page=${page}`, {

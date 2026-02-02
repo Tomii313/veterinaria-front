@@ -85,9 +85,7 @@ function SubirInforme() {
             formData.append("tipo", tipo);
             formData.append("informe", informe);
 
-            archivos.forEach(file => {
-                formData.append("archivo", file);
-            });
+            if (archivos.length > 0) formData.append("archivo", archivos[0]);
 
             const response = await fetch(`${import.meta.env.VITE_API_URL}/estudios/`, {
                 method: "POST",
