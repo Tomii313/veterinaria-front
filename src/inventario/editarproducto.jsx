@@ -67,19 +67,27 @@ function EditarProducto() {
             fetch(`${import.meta.env.VITE_API_URL}/productos/${id}/`, {
                 method: "PATCH",
                 headers: {
-                    "Content-Type": "application/json",
                     "Authorization": `Bearer ${accessToken}`,
-
                 },
                 body: formData,
             })
+                .then(response => {
+                    if (response.ok) {
+                        Swal.fire({
+                            title: "¡Actualizado!",
+                            text: "La información del producto se ha modificado correctamente.",
+                            icon: "success"
+                        });
+                        navigate("/inventario");
+                    }
+                })
+
         } else {
             fetch(`${import.meta.env.VITE_API_URL}/productos/${id}/`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${accessToken}`,
-
                 },
                 body: JSON.stringify({
                     nombre,
@@ -98,10 +106,9 @@ function EditarProducto() {
                         navigate("/inventario");
                     }
                 })
-
         }
-
     }
+
     return (
         <div className="flex h-screen overflow-hidden bg-white font-['Manrope',_sans-serif] text-[#111813]">
             {/* Side Navigation */}
