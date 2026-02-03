@@ -263,15 +263,18 @@ function Estudios() {
                                         <td className="px-6 py-5">
                                             <p className="text-sm text-slate-500 font-medium line-clamp-1 max-w-xs">{estudio.informe}</p>
                                         </td>
-                                        <td className="px-6 py-5 text-right">
-                                            <a
-                                                href={estudio.archivo}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                            >
-                                                <span className="material-symbols-outlined">download</span>
-                                            </a>
-                                        </td>
+                                        {estudios.map(estudio => (
+                                            <tr key={estudio.id}>
+                                                <td>{estudio.nombre}</td>
+                                                <td className="text-right">
+                                                    {estudio.archivo && (
+                                                        <a href={estudio.archivo} target="_blank" rel="noopener noreferrer">
+                                                            <span className="material-symbols-outlined">download</span>
+                                                        </a>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
                                     </tr>
                                 ))}
                             </tbody>
