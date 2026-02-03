@@ -16,6 +16,23 @@ function Estudios() {
 
 
 
+    const descargarArchivo = async (url, nombreArchivo) => {
+        try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            const urlBlob = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = urlBlob;
+            link.setAttribute('download', nombreArchivo || 'estudio.pdf');
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+        } catch (error) {
+            console.error("Error al descargar:", error);
+            alert("No se pudo descargar el archivo. Verificá si el link es válido.");
+        }
+    };
+
     useEffect(() => {
         try {
             fetch(`${import.meta.env.VITE_API_URL}/estudios/?fecha__gte=${fechaDesde}&fecha__lte=${fechaHasta}&page=${page}`, {
@@ -263,18 +280,19 @@ function Estudios() {
                                         <td className="px-6 py-5">
                                             <p className="text-sm text-slate-500 font-medium line-clamp-1 max-w-xs">{estudio.informe}</p>
                                         </td>
-                                        {estudios.map(estudio => (
-                                            <tr key={estudio.id}>
-                                                <td>{estudio.nombre}</td>
-                                                <td className="text-right">
-                                                    {estudio.archivo && (
-                                                        <a href={estudio.archivo} target="_blank" rel="noopener noreferrer">
-                                                            <span className="material-symbols-outlined">download</span>
-                                                        </a>
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        ))}
+                                        <td className="px-6 py-5 text-right">
+                                            {estudio.archivo ? ( // Cambié archivo_url por archivo
+                                                <button
+                                                    type="button"
+                                                    onClick={() => descargarArchivo(estudio.archivo, `estudio_${estudio.animal_nombre}.pdf`)}
+                                                    className="text-[#13ec5b] hover:text-[#0eb345] transition-colors"
+                                                >
+                                                    <span className="material-symbols-outlined">download</span>
+                                                </button>
+                                            ) : (
+                                                <span className="text-slate-400 text-xs font-medium italic">Sin archivo</span>
+                                            )}
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
