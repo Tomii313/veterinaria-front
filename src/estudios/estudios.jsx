@@ -16,21 +16,29 @@ function Estudios() {
 
 
 
-    const descargarArchivo = async (url, nombreArchivo) => {
-        try {
-            const response = await fetch(url);
-            const blob = await response.blob();
-            const urlBlob = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = urlBlob;
-            link.setAttribute('download', nombreArchivo || 'estudio.pdf');
-            document.body.appendChild(link);
-            link.click();
-            link.parentNode.removeChild(link);
-        } catch (error) {
-            console.error("Error al descargar:", error);
-            alert("No se pudo descargar el archivo. Verificá si el link es válido.");
+    const descargarArchivo = (url) => {
+        if (!url) return;
+
+        // 1. Limpiamos la URL y aseguramos HTTPS
+        let cleanUrl = url.replace('http://', 'https://');
+
+        // 2. Si es de Cloudinary, le inyectamos la bandera de descarga
+        if (cleanUrl.includes('cloudinary.com')) {
+            // Buscamos donde dice '/upload/' y le metemos 'fl_attachment/' justo después
+            cleanUrl = cleanUrl.replace('/upload/', '/upload/fl_attachment/');
         }
+
+        // 3. En lugar de window.open (que a veces los popups bloquean), 
+        // creamos un link invisible y lo clickeamos
+        const link = document.createElement('a');
+        link.href = cleanUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        // Esto fuerza la descarga en la mayoría de los navegadores
+        link.setAttribute('download', '');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
 
     useEffect(() => {
